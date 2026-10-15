@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeeksforGeeks | A computer science portal for geeks</title>
+<style>
+:root{
+  --green:#2f8d46; --green-dark:#0d6b1f; --green-light:#e8f5ea;
+  --text:#1a1a1a; --muted:#6b6f76; --border:#e2e5e9;
+  --bg:#fff; --sidebar-bg:#f7f8f9; --tap:44px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:var(--bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body.noscroll{overflow:hidden;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;margin:0;padding:0;}
+img{max-width:100%;display:block;}
+
+/* ---------- Buttons: responsive + touch friendly ---------- */
+.btn{
+  font-family:inherit;font-size:14px;font-weight:600;
+  min-height:var(--tap);padding:10px 18px;border-radius:6px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;border:1.5px solid transparent;
+  transition:background .15s,color .15s,border-color .15s,transform .08s;
+  white-space:nowrap;line-height:1.2;
+}
+.btn:active{transform:scale(.97);}
+.btn:focus-visible{outline:3px solid #9bd4a8;outline-offset:2px;}
+.btn-primary{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-primary:hover{background:var(--green-dark);border-color:var(--green-dark);}
+.btn-ghost{background:#fff;color:var(--green);border-color:var(--green);}
+.btn-ghost:hover{background:var(--green-light);}
+.btn-sm{min-height:36px;padding:7px 14px;font-size:13px;}
+.btn-block{width:100%;}
+.btn[disabled]{opacity:.6;cursor:default;}
+.btn .spin{
+  width:14px;height:14px;border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;
+}
+.btn-ghost .spin{border-color:rgba(47,141,70,.3);border-top-color:var(--green);}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+.skip-link{position:absolute;left:-999px;background:#000;color:#fff;padding:8px 12px;z-index:9999;}
+.skip-link:focus{left:8px;top:8px;}
+
+/* ---------- Header ---------- */
+header.site-header{position:sticky;top:0;z-index:500;background:#fff;border-bottom:1px solid var(--border);}
+.header-top{height:60px;display:flex;align-items:center;gap:14px;padding:0 16px;max-width:1400px;margin:0 auto;}
+.logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:19px;white-space:nowrap;}
+.logo .g1{color:var(--green);} .logo .g2{color:var(--text);}
+.logo-mark{width:28px;height:28px;border-radius:7px;background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex:none;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;width:var(--tap);height:var(--tap);
+  align-items:center;justify-content:center;flex-direction:column;padding:0;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);margin:3px 0;transition:.25s;}
+.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.hamburger.active span:nth-child(2){opacity:0;}
+.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+.search-wrap{flex:1;max-width:620px;position:relative;}
+.search-box{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:24px;
+  padding:0 5px 0 16px;background:#f5f6f7;transition:border-color .15s;}
+.search-box:focus-within{border-color:var(--green);background:#fff;}
+.search-box input{border:none;outline:none;background:transparent;flex:1;padding:11px 6px;font-size:14px;color:var(--text);min-width:0;}
+.search-box .btn{min-height:36px;width:36px;padding:0;border-radius:50%;}
+.search-suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;
+  border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);
+  max-height:320px;overflow-y:auto;display:none;z-index:600;}
+.search-suggest.open{display:block;}
+.search-suggest li button{width:100%;display:flex;gap:10px;align-items:center;justify-content:space-between;
+  padding:12px 14px;font-size:13.5px;border:none;background:none;cursor:pointer;text-align:left;
+  border-bottom:1px solid #f0f1f2;font-family:inherit;}
+.search-suggest li:last-child button{border-bottom:none;}
+.search-suggest li button:hover{background:var(--green-light);}
+.search-suggest .cat{color:var(--muted);font-size:12px;flex:none;}
+.search-suggest .empty{padding:14px;color:var(--muted);font-size:13px;}
+.header-actions{display:flex;align-items:center;gap:8px;}
+
+/* ---------- Subnav ---------- */
+nav.subnav{border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+nav.subnav::-webkit-scrollbar{display:none;}
+.subnav-inner{display:flex;max-width:1400px;margin:0 auto;padding:0 16px;min-width:max-content;}
+.subnav-inner button{background:none;border:none;font-family:inherit;padding:12px 15px;font-size:13.5px;
+  font-weight:600;color:#333;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;}
+.subnav-inner button:hover,.subnav-inner button.active{color:var(--green);border-bottom-color:var(--green);}
+
+/* ---------- Drawer ---------- */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:700;display:none;}
+.drawer-overlay.open{display:block;}
+.drawer{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#fff;z-index:800;
+  transition:left .25s ease;overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,.2);}
+.drawer.open{left:0;}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+.drawer-close{background:none;border:none;font-size:20px;cursor:pointer;width:var(--tap);height:var(--tap);}
+.drawer-auth{padding:14px 16px;display:flex;gap:10px;}
+.drawer ul li button{width:100%;text-align:left;background:none;border:none;font-family:inherit;
+  padding:14px 18px;font-size:14.5px;font-weight:600;border-bottom:1px solid #f2f2f2;color:#222;cursor:pointer;min-height:var(--tap);}
+.drawer ul li button:hover{background:var(--green-light);color:var(--green);}
+
+/* ---------- Layout ---------- */
+.page{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:24px;padding:20px 16px 40px;}
+main{min-width:0;}
+
+.chip-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;margin-bottom:6px;
+  border-bottom:1px solid var(--border);scrollbar-width:none;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{flex:none;min-height:38px;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;
+  border:1.5px solid var(--border);background:#fff;cursor:pointer;color:#333;font-family:inherit;transition:.15s;}
+.chip:hover{border-color:var(--green);color:var(--green);}
+.chip.active{background:var(--green);border-color:var(--green);color:#fff;}
+
+.result-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 0;font-size:13.5px;color:var(--muted);flex-wrap:wrap;}
+.result-bar strong{color:var(--text);}
+
+.hero-banner{background:linear-gradient(120deg,var(--green),#1f6e34);color:#fff;border-radius:12px;
+  padding:24px;margin:14px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.hero-banner h2{margin:0 0 6px;font-size:20px;}
+.hero-banner p{margin:0;font-size:13.5px;opacity:.92;max-width:460px;}
+.hero-banner .btn{background:#fff;color:var(--green-dark);border-color:#fff;}
+.hero-banner .btn:hover{background:#eafaea;}
+
+/* ---------- Articles ---------- */
+.article-card{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);}
+.article-open{flex:1;display:flex;gap:14px;background:none;border:none;font-family:inherit;
+  padding:0;text-align:left;cursor:pointer;min-width:0;color:inherit;}
+.article-open:hover .article-title{color:var(--green);}
+.article-thumb{width:160px;height:100px;border-radius:8px;flex:none;
+  background:linear-gradient(135deg,var(--green-light),#dff1e0);display:flex;align-items:center;
+  justify-content:center;color:var(--green);font-weight:800;font-size:14px;}
+.article-body{flex:1;min-width:0;}
+.article-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--green);
+  background:var(--green-light);padding:3px 9px;border-radius:4px;margin-bottom:7px;}
+.article-title{font-size:15.5px;font-weight:700;margin:0 0 6px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.article-desc{font-size:13px;color:var(--muted);margin:0 0 8px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.article-meta{display:flex;gap:10px;font-size:12px;color:var(--muted);align-items:center;}
+.bookmark{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;
+  width:var(--tap);height:var(--tap);display:flex;align-items:center;justify-content:center;flex:none;align-self:center;}
+.bookmark.active{color:var(--green);}
+.empty-state{padding:44px 16px;text-align:center;color:var(--muted);}
+.empty-state h3{color:var(--text);margin:0 0 6px;font-size:16px;}
+.load-more-wrap{display:flex;justify-content:center;margin-top:22px;}
+
+/* ---------- Sidebar ---------- */
+aside.sidebar{display:flex;flex-direction:column;gap:18px;}
+.side-card{background:var(--sidebar-bg);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.side-card h3{margin:0 0 12px;font-size:14.5px;font-weight:700;}
+.side-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.side-tabs button{flex:1;min-height:36px;padding:7px 4px;font-size:12px;font-weight:700;border-radius:6px;
+  border:1px solid var(--border);background:#fff;cursor:pointer;color:#444;font-family:inherit;}
+.side-tabs button.active{background:var(--green);border-color:var(--green);color:#fff;}
+.trend-item{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid #e8e9eb;}
+.trend-item:last-child{border-bottom:none;}
+.trend-item button{flex:1;display:flex;gap:10px;background:none;border:none;font-family:inherit;
+  padding:11px 0;text-align:left;cursor:pointer;color:inherit;}
+.trend-num{font-weight:800;color:var(--green);font-size:16px;width:22px;flex:none;}
+.trend-title{font-size:13px;font-weight:600;line-height:1.35;}
+.trend-item button:hover .trend-title{color:var(--green);}
+.ad-card{background:linear-gradient(135deg,#173b1f,#0d6b1f);color:#fff;border-radius:10px;padding:18px;text-align:center;}
+.ad-card h4{margin:0 0 6px;font-size:15px;}
+.ad-card p{margin:0 0 14px;font-size:12.5px;opacity:.9;}
+.ad-card .btn{background:#fff;color:var(--green-dark);border-color:#fff;}
+.field{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;
+  margin-bottom:10px;outline:none;font-family:inherit;min-height:var(--tap);}
+.field:focus{border-color:var(--green);}
+.form-msg{font-size:12.5px;margin-top:10px;padding:9px 11px;border-radius:6px;display:none;}
+.form-msg.show{display:block;}
+.form-msg.ok{background:var(--green-light);color:var(--green-dark);}
+.form-msg.err{background:#fdeaea;color:#b3261e;}
+
+/* ---------- Modal ---------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:none;
+  align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:560px;max-height:90vh;
+  overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;border-radius:12px 12px 0 0;}
+.modal-head h2{margin:0;font-size:17px;}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;width:var(--tap);height:var(--tap);flex:none;}
+.modal-body{padding:20px;}
+.modal-body h3{font-size:15px;margin:18px 0 8px;}
+.modal-body p{font-size:14px;color:#333;margin:0 0 12px;}
+.modal-body pre{background:#1e2b22;color:#d7f0dc;padding:14px;border-radius:8px;overflow-x:auto;
+  font-size:12.5px;line-height:1.55;margin:0 0 14px;}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;padding-top:6px;}
+.course-item{display:flex;gap:12px;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.course-item:last-child{border-bottom:none;}
+.course-item h4{margin:0 0 3px;font-size:14.5px;}
+.course-item span{font-size:12.5px;color:var(--muted);}
+
+/* ---------- Footer ---------- */
+footer{background:#0f2b16;color:#cfe6d3;margin-top:20px;}
+.footer-inner{max-width:1400px;margin:0 auto;padding:36px 16px 20px;display:grid;
+  grid-template-columns:repeat(5,1fr);gap:20px;}
+.footer-col h4{color:#fff;font-size:13.5px;margin:0 0 12px;}
+.footer-col ul li{margin-bottom:6px;}
+.footer-col ul li button{background:none;border:none;font-family:inherit;font-size:12.5px;
+  color:#b7d3bb;cursor:pointer;padding:5px 0;text-align:left;}
+.footer-col ul li button:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.12);max-width:1400px;margin:0 auto;padding:16px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;color:#9fc0a4;}
+.social-row{display:flex;gap:10px;}
+.social-row button{width:var(--tap);height:var(--tap);border-radius:50%;background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;border:none;cursor:pointer;}
+.social-row button:hover{background:var(--green);}
+
+#backToTop{position:fixed;bottom:22px;right:22px;width:46px;height:46px;border-radius:50%;
+  background:var(--green);color:#fff;border:none;cursor:pointer;font-size:19px;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;z-index:400;}
+#backToTop.show{display:flex;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#222;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;opacity:0;
+  pointer-events:none;transition:.25s;z-index:1000;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- Responsive ---------- */
+@media (max-width:980px){
+  .page{grid-template-columns:1fr;}
+  aside.sidebar{order:2;}
+  .footer-inner{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:760px){
+  .hamburger{display:flex;}
+  nav.subnav{display:none;}
+  .header-top{gap:8px;padding:0 10px;}
+  .logo .wordmark{display:none;}
+  .header-actions .btn-ghost{display:none;}
+  .article-thumb{width:100px;height:74px;font-size:12px;}
+  .article-title{font-size:14px;}
+  .article-desc{display:none;}
+  .hero-banner{padding:18px;}
+  .hero-banner .btn{width:100%;}
+  .modal{max-width:100%;border-radius:10px;}
+  .modal-actions .btn{flex:1 1 100%;}
+  .course-item .btn{width:100%;}
+  .footer-inner{grid-template-columns:repeat(2,1fr);padding:26px 16px 14px;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .load-more-wrap .btn{width:100%;}
+}
+@media (max-width:420px){
+  .article-thumb{width:82px;height:64px;}
+  .result-bar{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-top">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <button class="logo" id="logoBtn" style="background:none;border:none;cursor:pointer;font-family:inherit;padding:0;">
+      <span class="logo-mark">G</span>
+      <span class="wordmark"><span class="g1">geeks</span><span class="g2">for</span><span class="g1">geeks</span></span>
+    </button>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search DSA, Web Dev, Interview Questions..." autocomplete="off" aria-label="Search articles">
+        <button class="btn btn-primary" id="searchBtn" aria-label="Search">🔍</button>
+      </div>
+      <ul class="search-suggest" id="searchSuggest"></ul>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="signInBtn">Sign In</button>
+      <button class="btn btn-primary btn-sm" id="exploreBtn">Explore</button>
+    </div>
+  </div>
+
+  <nav class="subnav" aria-label="Categories">
+    <div class="subnav-inner" id="subnavInner"></div>
+  </nav>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <span class="logo"><span class="logo-mark">G</span><b>geeksforgeeks</b></span>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+  </div>
+  <div class="drawer-auth">
+    <button class="btn btn-ghost btn-block" id="drawerSignIn">Sign In</button>
+    <button class="btn btn-primary btn-block" id="drawerExplore">Explore</button>
+  </div>
+  <ul id="drawerLinks"></ul>
+</div>
+
+<div class="page">
+  <main id="main">
+    <div class="chip-row" id="chipRow"></div>
+
+    <div class="result-bar">
+      <span id="resultInfo"></span>
+      <button class="btn btn-ghost btn-sm" id="clearBtn" style="display:none;">Clear filters</button>
+    </div>
+
+    <div class="hero-banner">
+      <div>
+        <h2>Master Data Structures &amp; Algorithms</h2>
+        <p>Practice curated problems, track progress, and get interview-ready with structured courses.</p>
+      </div>
+      <button class="btn" id="heroCta">Start practicing</button>
+    </div>
+
+    <div id="articleList"></div>
+
+    <div class="load-more-wrap">
+      <button class="btn btn-ghost" id="loadMoreBtn">Load more articles</button>
+    </div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="side-card">
+      <div class="side-tabs" id="trendTabs">
+        <button class="active" data-t="all">All</button>
+        <button data-t="dsa">DSA</button>
+        <button data-t="web">Web Dev</button>
+      </div>
+      <h3>Trending now</h3>
+      <div id="trendList"></div>
+    </div>
+
+    <div class="ad-card">
+      <h4>Problem of the Day</h4>
+      <p>Solve one curated problem daily and build a consistent streak.</p>
+      <button class="btn btn-block" id="podBtn">Solve today's problem</button>
+    </div>
+
+    <div class="side-card">
+      <h3>Weekly newsletter</h3>
+      <input type="email" class="field" id="newsletterEmail" placeholder="Enter your email" aria-label="Email address">
+      <button class="btn btn-primary btn-block" id="subscribeBtn">Subscribe</button>
+      <div class="form-msg" id="newsletterMsg"></div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-inner" id="footerInner"></div>
+  <div class="footer-bottom">
+    <span>© 2026 GeeksforGeeks-style demo. Built for learning purposes.</span>
+    <div class="social-row">
+      <button aria-label="Facebook" data-s="Facebook">f</button>
+      <button aria-label="X" data-s="X">𝕏</button>
+      <button aria-label="LinkedIn" data-s="LinkedIn">in</button>
+      <button aria-label="YouTube" data-s="YouTube">▶</button>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" aria-label="Back to top">↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= DATA ================= */
+const CATS = ["DSA","Python","Java","C++","Web Dev","System Design","ML","DevOps","Aptitude","Interview"];
+
+const LIB = {
+  "DSA":[
+    ["Binary Search Explained","Search a sorted array in O(log n) by halving the range each step.",
+     "int binarySearch(int a[], int n, int key){\n  int lo = 0, hi = n - 1;\n  while (lo <= hi) {\n    int mid = lo + (hi - lo) / 2;\n    if (a[mid] == key) return mid;\n    if (a[mid] < key) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}"],
+    ["Detect a Cycle in a Linked List","Floyd's slow and fast pointer method uses O(1) extra space.",
+     "bool hasCycle(Node* head){\n  Node *slow = head, *fast = head;\n  while (fast && fast->next) {\n    slow = slow->next;\n    fast = fast->next->next;\n    if (slow == fast) return true;\n  }\n  return false;\n}"],
+    ["Sliding Window Technique","Keep a moving range and update the answer in one pass.",
+     "def max_sum_window(nums, k):\n    window = sum(nums[:k])\n    best = window\n    for i in range(k, len(nums)):\n        window += nums[i] - nums[i - k]\n        best = max(best, window)\n    return best"],
+    ["Dijkstra's Shortest Path","Greedy shortest paths from one source on non-negative weights.",
+     "import heapq\n\ndef dijkstra(graph, src):\n    dist = {node: float('inf') for node in graph}\n    dist[src] = 0\n    pq = [(0, src)]\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]:\n            continue\n        for v, w in graph[u]:\n            if d + w < dist[v]:\n                dist[v] = d + w\n                heapq.heappush(pq, (dist[v], v))\n    return dist"],
+    ["Dynamic Programming Patterns","Recognise the recurring shapes: knapsack, LIS, grid paths, and interval DP.",
+     "def fib(n, memo={}):\n    if n < 2:\n        return n\n    if n not in memo:\n        memo[n] = fib(n - 1, memo) + fib(n - 2, memo)\n    return memo[n]"]
+  ],
+  "Python":[
+    ["List Comprehension Guide","Build lists inline with an optional filter clause.",
+     "squares = [n * n for n in range(10)]\nevens = [n for n in range(20) if n % 2 == 0]\npairs = [(a, b) for a in 'xy' for b in (1, 2)]"],
+    ["Decorators Explained","Wrap a function to add behaviour without editing its body.",
+     "import functools, time\n\ndef timed(fn):\n    @functools.wraps(fn)\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = fn(*args, **kwargs)\n        print(fn.__name__, time.perf_counter() - start)\n        return result\n    return wrapper"],
+    ["File Handling in Python","Use a context manager so the file always closes.",
+     "with open('data.txt', 'r', encoding='utf-8') as f:\n    for line in f:\n        print(line.rstrip())\n\nwith open('out.txt', 'w', encoding='utf-8') as f:\n    f.write('hello\\n')"],
+    ["Working with Pandas","Load, filter, and group tabular data in a few lines.",
+     "import pandas as pd\n\ndf = pd.read_csv('sales.csv')\nbig = df[df['amount'] > 1000]\nby_region = df.groupby('region')['amount'].sum()"],
+    ["Python OOP Concepts","Classes bundle state and behaviour; inheritance shares both.",
+     "class Shape:\n    def area(self):\n        raise NotImplementedError\n\nclass Circle(Shape):\n    def __init__(self, r):\n        self.r = r\n    def area(self):\n        return 3.14159 * self.r ** 2"]
+  ],
+  "Java":[
+    ["Collections Framework Overview","List, Set, Map and when each one fits.",
+     "List<String> names = new ArrayList<>();\nnames.add(\"Ada\");\n\nMap<String, Integer> scores = new HashMap<>();\nscores.put(\"Ada\", 99);\n\nSet<Integer> unique = new HashSet<>(List.of(1, 2, 2, 3));"],
+    ["Multithreading in Java","Run work in parallel with an executor pool.",
+     "ExecutorService pool = Executors.newFixedThreadPool(4);\nfor (int i = 0; i < 8; i++) {\n    int id = i;\n    pool.submit(() -> System.out.println(\"task \" + id));\n}\npool.shutdown();"],
+    ["Streams API Deep Dive","Declarative pipelines over collections.",
+     "List<String> result = names.stream()\n    .filter(n -> n.length() > 3)\n    .map(String::toUpperCase)\n    .sorted()\n    .collect(Collectors.toList());"],
+    ["Exception Handling Best Practices","Catch what you can handle; let the rest bubble up.",
+     "try (BufferedReader br = new BufferedReader(new FileReader(path))) {\n    return br.readLine();\n} catch (IOException e) {\n    throw new UncheckedIOException(e);\n}"]
+  ],
+  "C++":[
+    ["STL Containers in C++","vector, map, set and unordered variants at a glance.",
+     "#include <vector>\n#include <map>\n\nstd::vector<int> v{3, 1, 2};\nstd::sort(v.begin(), v.end());\n\nstd::map<std::string, int> m;\nm[\"key\"] = 42;"],
+    ["Smart Pointers Explained","Ownership made explicit, memory freed automatically.",
+     "#include <memory>\n\nauto owned = std::make_unique<int>(5);\nauto shared = std::make_shared<int>(7);\nstd::weak_ptr<int> observer = shared;"],
+    ["C++ Templates Tutorial","Write once, compile for many types.",
+     "template <typename T>\nT maxOf(T a, T b) {\n  return (a > b) ? a : b;\n}\n\nint main(){ return maxOf(3, 9); }"]
+  ],
+  "Web Dev":[
+    ["React Hooks Complete Guide","useState and useEffect cover most component needs.",
+     "function Counter() {\n  const [count, setCount] = React.useState(0);\n  React.useEffect(() => {\n    document.title = `Count: ${count}`;\n  }, [count]);\n  return <button onClick={() => setCount(count + 1)}>{count}</button>;\n}"],
+    ["CSS Grid vs Flexbox","Grid lays out two dimensions; flexbox handles one.",
+     ".grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 16px;\n}\n\n.row {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n}"],
+    ["Building REST APIs with Node.js","A minimal Express server with one JSON route.",
+     "const express = require('express');\nconst app = express();\napp.use(express.json());\n\napp.get('/api/users', (req, res) => {\n  res.json([{ id: 1, name: 'Ada' }]);\n});\n\napp.listen(3000);"],
+    ["JavaScript Event Loop Explained","Microtasks drain before the next macrotask runs.",
+     "console.log('1');\nsetTimeout(() => console.log('3'), 0);\nPromise.resolve().then(() => console.log('2'));\n// prints 1, 2, 3"],
+    ["Web Accessibility Basics","Semantic HTML, focus order, and labels do most of the work.",
+     "<button aria-expanded=\"false\" aria-controls=\"menu\">Menu</button>\n<nav id=\"menu\" hidden>\n  <a href=\"/docs\">Docs</a>\n</nav>"]
+  ],
+  "System Design":[
+    ["Design a URL Shortener","Hash or counter-encode the long URL, store the mapping, redirect on lookup.",
+     "POST /shorten  { \"url\": \"https://example.com/very/long\" }\n  -> { \"short\": \"https://sho.rt/aZ4k1\" }\n\nGET /aZ4k1  -> 302 Location: https://example.com/very/long"],
+    ["Designing a Rate Limiter","Token bucket allows bursts while capping the average rate.",
+     "def allow(bucket, now, rate, capacity):\n    bucket['tokens'] = min(capacity,\n        bucket['tokens'] + (now - bucket['ts']) * rate)\n    bucket['ts'] = now\n    if bucket['tokens'] >= 1:\n        bucket['tokens'] -= 1\n        return True\n    return False"],
+    ["Caching Strategies for Scale","Cache-aside, write-through, and write-behind compared.",
+     "value = cache.get(key)\nif value is None:\n    value = db.query(key)\n    cache.set(key, value, ttl=300)\nreturn value"],
+    ["CAP Theorem Explained","Under a network partition you choose consistency or availability."," "]
+  ],
+  "ML":[
+    ["Introduction to Neural Networks","Layers of weighted sums plus a non-linearity, trained by backpropagation.",
+     "import torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(784, 128),\n    nn.ReLU(),\n    nn.Linear(128, 10)\n)"],
+    ["Gradient Descent Explained","Step downhill along the negative gradient of the loss.",
+     "for epoch in range(epochs):\n    preds = model(X)\n    loss = loss_fn(preds, y)\n    optimizer.zero_grad()\n    loss.backward()\n    optimizer.step()"],
+    ["Understanding Overfitting","The model memorises training noise and fails on new data."," "],
+    ["Feature Engineering Techniques","Scaling, encoding, and interaction terms often beat a fancier model.",
+     "from sklearn.preprocessing import StandardScaler\n\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)"]
+  ],
+  "DevOps":[
+    ["Docker for Beginners","Package an app and its dependencies into one image.",
+     "FROM python:3.12-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\nCOPY . .\nCMD [\"python\", \"app.py\"]"],
+    ["CI/CD Pipeline Basics","Build, test, and deploy automatically on every push.",
+     "name: ci\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci\n      - run: npm test"],
+    ["Kubernetes Core Concepts","Pods run containers; deployments keep the right number alive.",
+     "kubectl get pods\nkubectl scale deployment web --replicas=3\nkubectl rollout status deployment/web"],
+    ["Git Branching Strategies","Trunk-based vs GitFlow, and when each pays off.",
+     "git switch -c feature/login\ngit add .\ngit commit -m \"Add login form\"\ngit push -u origin feature/login"]
+  ],
+  "Aptitude":[
+    ["Time and Work Shortcuts","Convert work rates to a common total and add them."," "],
+    ["Permutations and Combinations","Order matters for permutations, not for combinations."," "],
+    ["Profit and Loss Formulas","Profit percent is always on cost price unless stated otherwise."," "],
+    ["Probability Basics for Interviews","Favourable outcomes over total outcomes, then watch for independence."," "]
+  ],
+  "Interview":[
+    ["Top Behavioral Questions","Answer with situation, task, action, and result in that order."," "],
+    ["How to Crack System Design Rounds","Clarify requirements, estimate scale, then draw the components."," "],
+    ["Resume Tips for SDE Roles","One page, impact-first bullets, numbers wherever you have them."," "],
+    ["Mock Interview Checklist","Environment, timing, thinking aloud, and a written post-mortem."," "]
+  ]
+};
+
+/* Flatten into an article dataset */
+let nextId = 1;
+const ARTICLES = [];
+Object.keys(LIB).forEach(cat=>{
+  LIB[cat].forEach(item=>{
+    ARTICLES.push({
+      id: nextId++,
+      cat: cat,
+      title: item[0],
+      desc: item[1],
+      code: (item[2] || "").trim(),
+      reads: (3 + (nextId * 7) % 45) + "K reads",
+      mins: (2 + (nextId * 3) % 9) + " min read"
+    });
+  });
+});
+
+/* ================= STATE ================= */
+const state = { cat:"All", query:"", shown:6, bookmarks:new Set() };
+let currentUser = null;
+let enrolledCourses = new Set();
+
+/* ================= HELPERS ================= */
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function api(path, options){
+  const response = await fetch('/api' + path, Object.assign({
+    credentials:'same-origin',
+    headers:{'Content-Type':'application/json'}
+  }, options || {}));
+  const data = await response.json();
+  if(!response.ok){
+    const error = new Error(data.error || 'The request failed.');
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+
+function showAccountButton(){
+  $('signInBtn').textContent = currentUser ? 'My profile' : 'Sign In';
+  $('drawerSignIn').textContent = currentUser ? 'My profile' : 'Sign In';
+}
+
+async function refreshBookmarks(){
+  if(!currentUser) return;
+  const [bookmarks, enrollments] = await Promise.all([
+    api('/me/bookmarks'),
+    api('/me/courses')
+  ]);
+  state.bookmarks = new Set(bookmarks.articleIds);
+  enrolledCourses = new Set(enrollments.courses.map(course=>course.id));
+  renderArticles();
+}
+
+async function initializeBackend(){
+  try{
+    await api('/health');
+    const courses = await api('/courses');
+    COURSES = courses.courses.map(c=>[c.name, c.duration + ' • ' + c.description, c.id]);
+    try{
+      const session = await api('/auth/me');
+      currentUser = session.user;
+      showAccountButton();
+      await refreshBookmarks();
+    }catch(error){
+      if(error.status !== 401) throw error;
+    }
+  }catch(error){
+    console.error('Backend initialization failed:', error);
+    toast('Backend unavailable. Start it with npm start.');
+  }
+}
+
+let toastTimer;
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* Any button can show a short loading state, then a result */
+function withLoading(btn, ms, done){
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>Loading';
+  setTimeout(()=>{
+    btn.disabled = false;
+    btn.innerHTML = original;
+    done();
+  }, ms);
+}
+
+/* ================= FILTERING ================= */
+function filtered(){
+  const q = state.query.trim().toLowerCase();
+  return ARTICLES.filter(a=>{
+    const catOk = state.cat === "All" || a.cat === state.cat;
+    const qOk = !q || a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) || a.cat.toLowerCase().includes(q);
+    return catOk && qOk;
+  });
+}
+
+/* ================= RENDER ================= */
+function renderChips(){
+  const row = $('chipRow');
+  row.innerHTML = "";
+  ["All", ...CATS].forEach(cat=>{
+    const b = document.createElement('button');
+    b.className = 'chip' + (cat === state.cat ? ' active' : '');
+    b.type = 'button';
+    b.textContent = cat;
+    b.addEventListener('click', ()=>{ state.cat = cat; state.shown = 6; render(); toast('Filtered by ' + cat); });
+    row.appendChild(b);
+  });
+  document.querySelectorAll('#subnavInner button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cat === state.cat);
+  });
+}
+
+function renderArticles(){
+  const list = $('articleList');
+  const all = filtered();
+  const slice = all.slice(0, state.shown);
+  list.innerHTML = "";
+
+  $('resultInfo').innerHTML = state.query
+    ? 'Showing <strong>' + all.length + '</strong> result' + (all.length===1?'':'s') + ' for “' + esc(state.query) + '”' + (state.cat!=='All' ? ' in ' + esc(state.cat) : '')
+    : 'Showing <strong>' + Math.min(state.shown, all.length) + '</strong> of ' + all.length + ' articles' + (state.cat!=='All' ? ' in ' + esc(state.cat) : '');
+  $('clearBtn').style.display = (state.query || state.cat !== 'All') ? 'inline-flex' : 'none';
+
+  if(all.length === 0){
+    list.innerHTML = '<div class="empty-state"><h3>No articles found</h3><p>Try a different keyword or clear the filters.</p></div>';
+    $('loadMoreBtn').style.display = 'none';
+    return;
+  }
+
+  slice.forEach(a=>{
+    const marked = state.bookmarks.has(a.id);
+    const card = document.createElement('div');
+    card.className = 'article-card';
+    card.innerHTML =
+      '<button class="article-open" type="button">' +
+        '<span class="article-thumb">' + esc(a.cat) + '</span>' +
+        '<span class="article-body">' +
+          '<span class="article-tag">' + esc(a.cat) + '</span>' +
+          '<span class="article-title" style="display:block;">' + esc(a.title) + '</span>' +
+          '<span class="article-desc" style="display:block;">' + esc(a.desc) + '</span>' +
+          '<span class="article-meta">' + a.reads + ' • ' + a.mins + '</span>' +
+        '</span>' +
+      '</button>' +
+      '<button class="bookmark' + (marked?' active':'') + '" type="button" aria-label="Bookmark article">' + (marked?'★':'☆') + '</button>';
+
+    card.querySelector('.article-open').addEventListener('click', ()=>openArticle(a));
+    card.querySelector('.bookmark').addEventListener('click', function(){
+      toggleBookmark(a);
+    });
+    list.appendChild(card);
+  });
+
+  $('loadMoreBtn').style.display = state.shown >= all.length ? 'none' : 'inline-flex';
+}
+
+async function toggleBookmark(article){
+  if(!currentUser){ toast('Sign in to save bookmarks'); signInDialog(); return; }
+  const removing = state.bookmarks.has(article.id);
+  try{
+    await api('/me/bookmarks/' + article.id, {method:removing?'DELETE':'POST'});
+    if(removing){ state.bookmarks.delete(article.id); toast('Bookmark removed'); }
+    else { state.bookmarks.add(article.id); toast('Saved to bookmarks (' + state.bookmarks.size + ')'); }
+    renderArticles();
+  }catch(error){
+    toast(error.message);
+  }
+}
+
+function render(){ renderChips(); renderArticles(); }
+
+/* ================= MODAL ================= */
+let lastFocus = null;
+function openModal(title, html){
+  lastFocus = document.activeElement;
+  $('modalTitle').textContent = title;
+  $('modalBody').innerHTML = html;
+  $('modalOverlay').classList.add('open');
+  document.body.classList.add('noscroll');
+  $('modalClose').focus();
+}
+function closeModal(){
+  $('modalOverlay').classList.remove('open');
+  document.body.classList.remove('noscroll');
+  if(lastFocus) lastFocus.focus();
+}
+$('modalClose').addEventListener('click', closeModal);
+$('modalOverlay').addEventListener('click', e=>{ if(e.target === $('modalOverlay')) closeModal(); });
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape'){ closeModal(); closeDrawer(); $('searchSuggest').classList.remove('open'); }
+});
+
+function openArticle(a){
+  const marked = state.bookmarks.has(a.id);
+  let html =
+    '<p style="color:var(--muted);font-size:12.5px;margin-bottom:14px;">' +
+      esc(a.cat) + ' • ' + a.reads + ' • ' + a.mins + '</p>' +
+    '<p>' + esc(a.desc) + '</p>';
+  if(a.code){
+    html += '<h3>Example</h3><pre><code>' + esc(a.code) + '</code></pre>';
+  }
+  html +=
+    '<h3>Key points</h3>' +
+    '<ul style="padding-left:20px;font-size:14px;color:#333;">' +
+      '<li style="list-style:disc;margin-bottom:6px;">Understand the idea before memorising the code.</li>' +
+      '<li style="list-style:disc;margin-bottom:6px;">Work through the edge cases by hand on a small input.</li>' +
+      '<li style="list-style:disc;">Compare the time and space cost against the brute-force version.</li>' +
+    '</ul>' +
+    '<div class="modal-actions">' +
+      '<button class="btn btn-primary" id="mdPractice">Practice this topic</button>' +
+      '<button class="btn btn-ghost" id="mdSave">' + (marked ? 'Remove bookmark' : 'Save for later') + '</button>' +
+    '</div>';
+  openModal(a.title, html);
+
+  $('mdPractice').addEventListener('click', function(){
+    withLoading(this, 600, ()=>{
+      state.cat = a.cat; state.query = ''; $('searchInput').value = ''; state.shown = 6;
+      render(); closeModal();
+      $('main').scrollIntoView({behavior:'smooth'});
+      toast('Loaded ' + a.cat + ' practice articles');
+    });
+  });
+  $('mdSave').addEventListener('click', async function(){
+    await toggleBookmark(a);
+    this.textContent = state.bookmarks.has(a.id) ? 'Remove bookmark' : 'Save for later';
+  });
+}
+
+/* ================= SUBNAV + DRAWER ================= */
+const subnav = $('subnavInner');
+["All", ...CATS].forEach(cat=>{
+  const b = document.createElement('button');
+  b.type = 'button'; b.dataset.cat = cat; b.textContent = cat;
+  b.addEventListener('click', ()=>{ state.cat = cat; state.shown = 6; render(); toast('Filtered by ' + cat); });
+  subnav.appendChild(b);
+});
+
+const drawer = $('drawer'), drawerOverlay = $('drawerOverlay'), hamburgerBtn = $('hamburgerBtn');
+["All", ...CATS].forEach(cat=>{
+  const li = document.createElement('li');
+  const b = document.createElement('button');
+  b.type = 'button'; b.textContent = cat;
+  b.addEventListener('click', ()=>{ state.cat = cat; state.shown = 6; render(); closeDrawer(); toast('Filtered by ' + cat); });
+  li.appendChild(b); $('drawerLinks').appendChild(li);
+});
+function openDrawer(){ drawer.classList.add('open'); drawerOverlay.classList.add('open');
+  hamburgerBtn.classList.add('active'); hamburgerBtn.setAttribute('aria-expanded','true'); document.body.classList.add('noscroll'); }
+function closeDrawer(){ drawer.classList.remove('open'); drawerOverlay.classList.remove('open');
+  hamburgerBtn.classList.remove('active'); hamburgerBtn.setAttribute('aria-expanded','false'); document.body.classList.remove('noscroll'); }
+hamburgerBtn.addEventListener('click', ()=> drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+drawerOverlay.addEventListener('click', closeDrawer);
+$('drawerClose').addEventListener('click', closeDrawer);
+
+/* ================= SEARCH ================= */
+const searchInput = $('searchInput'), searchSuggest = $('searchSuggest');
+
+function suggest(q){
+  q = q.trim().toLowerCase();
+  if(!q){ searchSuggest.classList.remove('open'); return; }
+  const matches = ARTICLES.filter(a=>a.title.toLowerCase().includes(q) || a.cat.toLowerCase().includes(q)).slice(0,7);
+  searchSuggest.innerHTML = "";
+  if(!matches.length){
+    searchSuggest.innerHTML = '<li class="empty">No matches for “' + esc(q) + '”</li>';
+  } else {
+    matches.forEach(m=>{
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = '<span>' + esc(m.title) + '</span><span class="cat">' + esc(m.cat) + '</span>';
+      b.addEventListener('click', ()=>{
+        searchSuggest.classList.remove('open');
+        searchInput.value = m.title;
+        openArticle(m);
+      });
+      li.appendChild(b); searchSuggest.appendChild(li);
+    });
+  }
+  searchSuggest.classList.add('open');
+}
+
+function runSearch(btn){
+  const q = searchInput.value.trim();
+  searchSuggest.classList.remove('open');
+  const doIt = ()=>{
+    state.query = q; state.shown = 6;
+    render();
+    $('main').scrollIntoView({behavior:'smooth'});
+    const n = filtered().length;
+    toast(n ? n + ' result' + (n===1?'':'s') + ' found' : 'No results for “' + q + '”');
+  };
+  if(btn) withLoading(btn, 450, doIt); else doIt();
+}
+
+searchInput.addEventListener('input', ()=>suggest(searchInput.value));
+searchInput.addEventListener('focus', ()=>{ if(searchInput.value) suggest(searchInput.value); });
+searchInput.addEventListener('keydown', e=>{ if(e.key === 'Enter') runSearch(null); });
+$('searchBtn').addEventListener('click', function(){ runSearch(this); });
+document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrap')) searchSuggest.classList.remove('open'); });
+
+$('clearBtn').addEventListener('click', ()=>{
+  state.cat = 'All'; state.query = ''; state.shown = 6;
+  searchInput.value = '';
+  render(); toast('Filters cleared');
+});
+
+/* ================= TRENDING ================= */
+const TREND = {
+  all:["Binary Search Explained","React Hooks Complete Guide","Design a URL Shortener","Decorators Explained","Docker for Beginners"],
+  dsa:["Sliding Window Technique","Dijkstra's Shortest Path","Dynamic Programming Patterns","Detect a Cycle in a Linked List","Binary Search Explained"],
+  web:["CSS Grid vs Flexbox","JavaScript Event Loop Explained","Building REST APIs with Node.js","Web Accessibility Basics","React Hooks Complete Guide"]
+};
+function renderTrend(tab){
+  const box = $('trendList');
+  box.innerHTML = "";
+  TREND[tab].forEach((title,i)=>{
+    const row = document.createElement('div');
+    row.className = 'trend-item';
+    row.innerHTML = '<button type="button"><span class="trend-num">' + (i+1) + '</span><span class="trend-title">' + esc(title) + '</span></button>';
+    row.querySelector('button').addEventListener('click', ()=>{
+      const a = ARTICLES.find(x=>x.title === title);
+      if(a) openArticle(a); else toast('Article unavailable');
+    });
+    box.appendChild(row);
+  });
+}
+$('trendTabs').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  $('trendTabs').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  renderTrend(b.dataset.t);
+});
+renderTrend('all');
+
+/* ================= HEADER / CTA BUTTONS ================= */
+function signInDialog(register){
+  register = Boolean(register);
+  openModal(register?'Create your account':'Sign in to your account',
+    '<input type="email" class="field" id="siEmail" placeholder="Email address" autocomplete="email">' +
+    '<input type="password" class="field" id="siPass" placeholder="Password" autocomplete="' + (register?'new-password':'current-password') + '">' +
+    '<button class="btn btn-primary btn-block" id="siSubmit">' + (register?'Create account':'Sign in') + '</button>' +
+    '<div class="form-msg" id="siMsg"></div>' +
+    '<p style="font-size:12.5px;color:var(--muted);margin-top:14px;">' +
+      (register?'Already have an account? ':'New here? ') +
+      '<button type="button" id="siToggle" style="border:0;background:none;color:var(--green);font:inherit;font-weight:600;cursor:pointer;">' +
+        (register?'Sign in':'Create an account') +
+      '</button></p>');
+  $('siToggle').addEventListener('click', ()=>signInDialog(!register));
+  $('siSubmit').addEventListener('click', async function(){
+    const email = $('siEmail').value.trim(), pass = $('siPass').value;
+    const msg = $('siMsg');
+    this.disabled = true;
+    msg.className = 'form-msg';
+    try{
+      const result = await api(register?'/auth/register':'/auth/login', {
+        method:'POST',
+        body:JSON.stringify({email, password:pass})
+      });
+      currentUser = result.user;
+      showAccountButton();
+      await refreshBookmarks();
+      msg.className = 'form-msg show ok';
+      msg.textContent = register?'Account created successfully.':'Signed in as ' + currentUser.email + '.';
+      setTimeout(closeModal, 800);
+      toast(register?'Welcome to the learning portal!':'Welcome back!');
+    }catch(error){
+      msg.className = 'form-msg show err';
+      msg.textContent = error.message;
+    }finally{
+      this.disabled = false;
+    }
+  });
+}
+$('signInBtn').addEventListener('click', ()=>currentUser?profileDialog():signInDialog());
+$('drawerSignIn').addEventListener('click', ()=>{ closeDrawer(); currentUser?profileDialog():signInDialog(); });
+
+function profileDialog(){
+  openModal('Your account',
+    '<p>Signed in as <strong>' + esc(currentUser.email) + '</strong></p>' +
+    '<button class="btn btn-ghost btn-block" id="profileProgress">View my learning progress</button>' +
+    '<button class="btn btn-primary btn-block" id="profileLogout">Sign out</button>');
+  $('profileProgress').addEventListener('click', async ()=>{
+    try{
+      const progress = await api('/me/progress');
+      openModal('Your learning progress',
+        '<p>Courses enrolled: <strong>' + progress.coursesEnrolled + '</strong></p>' +
+        '<p>Quizzes attempted: <strong>' + progress.quizzesAttempted + '</strong></p>' +
+        '<p>Average quiz score: <strong>' + progress.averageScore + '%</strong></p>' +
+        (progress.attempts.length?'<h3>Recent quiz attempts</h3><ul>' +
+          progress.attempts.slice(0,5).map(a=>'<li>' + esc(a.title) + ': ' + a.score + '/' + a.total + '</li>').join('') +
+          '</ul>':'<p>No quiz attempts yet.</p>'));
+    }catch(error){ toast(error.message); }
+  });
+  $('profileLogout').addEventListener('click', async ()=>{
+    try{
+      await api('/auth/logout', {method:'POST'});
+      currentUser = null;
+      state.bookmarks.clear();
+      enrolledCourses.clear();
+      showAccountButton();
+      renderArticles();
+      closeModal();
+      toast('Signed out');
+    }catch(error){ toast(error.message); }
+  });
+}
+
+let COURSES = [
+  ["DSA to Development","16 weeks • Beginner friendly",1],
+  ["Full Stack Web Development","20 weeks • Project based",2],
+  ["System Design Masterclass","8 weeks • For working engineers",3],
+  ["Machine Learning Foundations","12 weeks • Python required",4]
+];
+function exploreDialog(btn){
+  const show = ()=>{
+    let html = '<p>Pick a track to see what it covers.</p>';
+    COURSES.forEach((c,i)=>{
+      html += '<div class="course-item"><div><h4>' + esc(c[0]) + '</h4><span>' + esc(c[1]) + '</span></div>' +
+              '<button class="btn ' + (enrolledCourses.has(c[2])?'btn-primary':'btn-ghost') + ' btn-sm" data-c="' + c[2] + '">' +
+              (enrolledCourses.has(c[2])?'Enrolled':'Enroll') + '</button></div>';
+    });
+    openModal('Explore courses', html);
+    $('modalBody').querySelectorAll('[data-c]').forEach(b=>{
+      b.addEventListener('click', async function(){
+        const course = COURSES.find(c=>c[2] === Number(this.dataset.c));
+        if(!course) return;
+        if(enrolledCourses.has(course[2])) return;
+        try{
+          const result = await api('/courses/' + course[2] + '/enroll', {method:'POST'});
+          enrolledCourses.add(course[2]);
+          this.textContent = 'Enrolled';
+          this.classList.remove('btn-ghost'); this.classList.add('btn-primary');
+          toast('Enrolled in ' + result.course.name);
+        }catch(error){
+          toast(error.message);
+          if(error.status === 401) signInDialog();
+        }
+      });
+    });
+  };
+  if(btn) withLoading(btn, 450, show); else show();
+}
+$('exploreBtn').addEventListener('click', function(){ exploreDialog(this); });
+$('drawerExplore').addEventListener('click', ()=>{ closeDrawer(); exploreDialog(null); });
+
+$('logoBtn').addEventListener('click', ()=>{
+  state.cat='All'; state.query=''; state.shown=6; searchInput.value='';
+  render(); window.scrollTo({top:0,behavior:'smooth'}); toast('Back to home feed');
+});
+
+$('heroCta').addEventListener('click', function(){
+  withLoading(this, 550, ()=>{
+    state.cat = 'DSA'; state.query=''; searchInput.value=''; state.shown = 6;
+    render();
+    $('articleList').scrollIntoView({behavior:'smooth', block:'start'});
+    toast('Loaded ' + filtered().length + ' DSA articles');
+  });
+});
+
+$('loadMoreBtn').addEventListener('click', function(){
+  withLoading(this, 500, ()=>{
+    state.shown += 6;
+    renderArticles();
+    toast('Loaded more articles');
+  });
+});
+
+$('podBtn').addEventListener('click', function(){
+  withLoading(this, 600, ()=>{
+    const a = ARTICLES[Math.floor(Math.random() * ARTICLES.length)];
+    openArticle(a);
+  });
+});
+
+/* Newsletter */
+$('subscribeBtn').addEventListener('click', function(){
+  const email = $('newsletterEmail').value.trim();
+  const msg = $('newsletterMsg');
+  if(!email || !email.includes('@') || !email.includes('.')){
+    msg.className = 'form-msg show err';
+    msg.textContent = 'Enter a valid email address to subscribe.';
+    $('newsletterEmail').focus();
+    return;
+  }
+  withLoading(this, 700, async ()=>{
+    try{
+    await api('/newsletter/subscribe', {method:'POST', body:JSON.stringify({email})});
+    msg.className = 'form-msg show ok';
+    msg.textContent = 'Subscribed as ' + email + '.';
+    $('newsletterEmail').value = '';
+    toast('Subscription confirmed');
+    }catch(error){
+    msg.className = 'form-msg show err';
+    msg.textContent = error.message;
+    }
+  });
+});
+
+/* ================= FOOTER ================= */
+const FOOTER = [
+  ["Languages", CATS.slice(0,5)],
+  ["DSA", ["Arrays","Linked List","Trees","Graphs","Sorting"]],
+  ["Web Dev", ["HTML & CSS","React","Node.js","Django","MongoDB"]],
+  ["Interview prep", ["Company wise","Aptitude","Puzzles","Resume tips"]],
+  ["Company", ["About us","Careers","Contact us","Privacy policy"]]
+];
+FOOTER.forEach(col=>{
+  const div = document.createElement('div');
+  div.className = 'footer-col';
+  div.innerHTML = '<h4>' + esc(col[0]) + '</h4><ul>' +
+    col[1].map(l=>'<li><button type="button">' + esc(l) + '</button></li>').join('') + '</ul>';
+  div.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const label = b.textContent;
+      const match = CATS.find(c=>c.toLowerCase() === label.toLowerCase());
+      if(match){ state.cat = match; state.query=''; searchInput.value=''; state.shown=6; render(); window.scrollTo({top:0,behavior:'smooth'}); toast('Filtered by ' + match); }
+      else { state.query = label; state.cat='All'; searchInput.value = label; state.shown=6; render(); window.scrollTo({top:0,behavior:'smooth'}); toast('Searched for ' + label); }
+    });
+  });
+  $('footerInner').appendChild(div);
+});
+document.querySelectorAll('.social-row button').forEach(b=>{
+  b.addEventListener('click', ()=>toast('Opening ' + b.dataset.s + ' page'));
+});
+
+/* ================= BACK TO TOP ================= */
+const backToTop = $('backToTop');
+window.addEventListener('scroll', ()=>backToTop.classList.toggle('show', window.scrollY > 500));
+backToTop.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ================= INIT ================= */
+render();
+initializeBackend();
+})();
+</script>
+</body>
+</html>
